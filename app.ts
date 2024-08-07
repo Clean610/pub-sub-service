@@ -146,8 +146,6 @@ class PubSubService implements IPublishSubscribeService {
   private subRegistry: { [key: string]: ISubscriber[] } = {};
 
   subscribe(type: string, handler: ISubscriber) {
-    // console.log("sub registry :", this.subRegistry);
-    // console.log("handler :", handler);
 
     if (!this.subRegistry[type]) {
       this.subRegistry[type] = [];
@@ -178,8 +176,7 @@ class MachineStockMonitor {
   checkMachine(machine: Machine) {
     const previousState = this.stockState[machine.id];
     const currentState = machine.stockLevel < 3 ? "low" : "ok";
-    console.log("previous", previousState);
-    console.log("currentState", currentState);
+
     if (previousState !== currentState) {
       if (currentState === "low") {
         this.publisher.publish(new LowStockWarningEvent(machine.id));
@@ -255,7 +252,6 @@ const eventGenerator = (): IEvent => {
 
   // create 5 random events
   const events = [1,2,3,4,5].map(i => eventGenerator());
-  console.log("event:",events);
 
   // publish the events
   events.forEach(event => pubSubService.publish(event));
